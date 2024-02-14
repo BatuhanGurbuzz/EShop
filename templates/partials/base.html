@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="zxx" dir="ltr">
+<html lang="tr" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,15 +12,14 @@
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/images/favicon.ico' %}" />
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'assets/css/font.awesome.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/pe-icon-7-stroke.css' %}" />
-    <link rel="stylesheet" href="{% static 'assets/css/animate.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/venobox.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/jquery-ui.min.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/plugins.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 </head>
 
 <body>
@@ -484,6 +483,172 @@
         {% block content %}
         {% endblock content %}
 
+        <!-- Modal -->
+{% for product in products  %}
+<div class="modal modal-2 fade" id="exampleModal-{{forloop.counter}}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i class="pe-7s-close"></i></button>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px">
+                        <!-- Swiper -->
+                        <div class="swiper-container gallery-top">
+                            <div class="swiper-wrapper">
+
+                                {% for img in product.images_set.all  %}
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="{{ img.image.url }}" alt="">
+                                    </div>
+                                {% endfor %}
+
+                                
+                            </div>
+                        </div>
+                        <div class="swiper-container gallery-thumbs mt-20px slider-nav-style-1 small-nav">
+                            <div class="swiper-wrapper">
+                                {% for img in product.images_set.all  %}
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="{{img.image.url}}" alt="">
+                                    </div>
+                                {% endfor %}
+                                
+                            </div>
+                            <!-- Add Arrows -->
+                            <div class="swiper-buttons">
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12" data-aos="fade-up" data-aos-delay="200">
+                        <div class="product-details-content quickview-content">
+                            <h2>{{product.name|truncatewords:5 }}</h2>
+                            <div class="pricing-meta">
+                                <ul class="d-flex">
+                                    <li class="new-price">{{product.price}} TL</li>
+                                </ul>
+                            </div>
+                            <div class="pro-details-rating-wrap">
+                                <div class="rating-product">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <span class="read-review"><a class="reviews" href="#">( 2 Review )</a></span>
+                            </div>
+                            <p class="mt-30px">{{ product.description|truncatewords:10 }}</p>
+                            <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
+                                <span>SKU:</span>
+                                <ul class="d-flex">
+                                    <li>
+                                        <a href="#">Ch-256xl</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
+                                <span>Kategori: </span>
+                                <ul class="d-flex">
+                                    <li>
+                                        <a href="#">{{product.categories}} </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
+                                <span>Tags: </span>
+                                <ul class="d-flex">
+                                    {% for tag in product.tag_set.all %}
+                                        <li>
+                                            <a href="#"> {{tag.name}} </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="pro-details-quality">
+                                <div class="cart-plus-minus">
+                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
+                                </div>
+                                <div class="pro-details-cart">
+                                    <button class="add-cart"> Add To
+                                        Cart</button>
+                                </div>
+                                <div class="pro-details-compare-wishlist pro-details-wishlist ">
+                                    <a href="wishlist.html"><i class="pe-7s-like"></i></a>
+                                </div>
+                            </div>
+                            <div class="payment-img">
+                                <a href="#"><img src="assets/images/icons/payment.png" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+<!-- Modal end -->
+
+<!-- Modal Cart -->
+<div class="modal customize-class fade" id="exampleModal-Cart" tabindex="-1"   aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="pe-7s-close"></i></button>
+                <div class="tt-modal-messages">
+                    <i class="pe-7s-check"></i> Added to cart successfully!
+                </div>
+                <div class="tt-modal-product">
+                    <div class="tt-img">
+                        <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                    </div>
+                    <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>     
+<!-- Modal wishlist -->
+<div class="modal customize-class fade" id="exampleModal-Wishlist" tabindex="-1"   aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="pe-7s-close"></i></button>
+                <div class="tt-modal-messages">
+                    <i class="pe-7s-check"></i> Added to Wishlist successfully!
+                </div>
+                <div class="tt-modal-product">
+                    <div class="tt-img">
+                        <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                    </div>
+                    <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+<!-- Modal compare -->
+<div class="modal customize-class fade" id="exampleModal-Compare" tabindex="-1"   aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="pe-7s-close"></i></button>
+                <div class="tt-modal-messages">
+                    <i class="pe-7s-check"></i> Added to compare successfully!
+                </div>
+                <div class="tt-modal-product">
+                    <div class="tt-img">
+                        <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                    </div>
+                    <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -496,7 +661,7 @@
                             <div class="col-md-6 col-lg-3 mb-md-30px mb-lm-30px">
                                 <div class="single-wedge">
                                     <div class="footer-logo">
-                                        <a href="index.html"><img src="assets/images/logo/footer-logo.png" alt=""></a>
+                                        <a href="index.html"><img src="{% static 'assets/images/logo/footer-logo.png' %}" alt=""></a>
                                     </div>
                                     <p class="about-text">Lorem ipsum dolor sit amet consl adipisi elit, sed do eiusmod templ incididunt ut labore
                                     </p>
@@ -580,7 +745,7 @@
                         <div class="line-shape-top line-height-1">
                             <div class="row flex-md-row-reverse align-items-center">
                                 <div class="col-md-6 text-center text-md-end">
-                                    <div class="payment-mth"><a href="#"><img class="img img-fluid" src="assets/images/icons/payment.png" alt="payment-image"></a></div>
+                                    <div class="payment-mth"><a href="#"><img class="img img-fluid" src="{% static 'assets/images/icons/payment.png' %}" alt="payment-image"></a></div>
                                 </div>
                                 <div class="col-md-6 text-center text-md-start">
                                     <p class="copy-text"> © 2021 <strong>Hmart</strong> Made With <i class="fa fa-heart"
@@ -606,12 +771,15 @@
     <script src="{% static 'assets/js/plugins/swiper-bundle.min.js' %}"></script>
     <script src="{% static 'assets/js/plugins/scrollUp.js' %}"></script>
     <script src="{% static 'assets/js/plugins/venobox.min.js' %}"></script>
-    <script src="{% static 'assets/js/plugins/jquery-ui.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="{% static 'assets/js/plugins/mailchimp-ajax.js' %}"></script>
     <script src="{% static 'assets/js/vendor.min.js' %}"></script>
     <script src="{% static 'assets/js/plugins.min.js' %}"></script>
     <script src="{% static 'assets/js/main.min.js' %}"></script>
     <script src="{% static 'assets/js/main.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 
 

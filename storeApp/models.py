@@ -8,6 +8,10 @@ class Categories(models.Model):
     def __str__(self):
         return self.name
     
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
+    
     class Meta:
         verbose_name = "Kategori"
         verbose_name_plural = "Kategoriler"
@@ -21,8 +25,6 @@ class Brand(models.Model):
     class Meta:
         verbose_name = "Marka"
         verbose_name_plural = "Markalar"
-    
-    
 
 class Color(models.Model):
     name = models.CharField(max_length = 200, verbose_name = "Renk Adı")
@@ -43,6 +45,7 @@ class Filter_Price(models.Model):
         ('4000-5000', '5000-6000'),
         ('6000-7000', '7000-8000'),
         ('8000-9000', '9000-10000'),
+        ('10000 - ∞' , '∞ - ∞')
     )
     price = models.CharField(choices = FILTER_PRICE, max_length = 60, verbose_name = "Fiyat Aralığı")
     
@@ -56,12 +59,6 @@ class Filter_Price(models.Model):
         verbose_name_plural = "Fiyatlar"
         
 class Product(models.Model):
-    
-    CONDITION = (
-        ('NEW', 'Yeni'),
-        ('OLD', 'Eski'),
-    )
-    
     STOCK = (
         ('AVAILABLE', 'Mevcut'),
         ('NOT AVAILABLE', 'Mevcut Değil'),
@@ -70,9 +67,12 @@ class Product(models.Model):
     STATUS = (
         ('Publish', 'Aktif'), 
         ('Draft', 'Pasif')
-              
     )
     
+    CONDITION = (
+        ('New', 'Yeni'),
+        ('OLD', 'Eski')
+    )
     
     unique_id = models.CharField(unique = True, max_length = 200, verbose_name = "Ürün Kodu", null=True, blank=True)
     
@@ -82,8 +82,6 @@ class Product(models.Model):
     
     price = models.IntegerField(verbose_name = "Fiyat")
     
-    condition = models.BooleanField(choices = CONDITION, default = True, verbose_name = "Durum")
-    
     information = models.TextField(verbose_name = "Bilgi", blank = True, null = True)
     
     description = models.TextField(verbose_name = "Açıklama", blank = True, null = True)
@@ -91,6 +89,8 @@ class Product(models.Model):
     stock = models.CharField(choices = STOCK, max_length = 60, verbose_name = "Stok Durumu")
     
     status = models.CharField(choices = STATUS, default = "Publish",max_length = 200, verbose_name = "Durum")
+    
+    condition = models.CharField(choices = CONDITION, default='Yeni', max_length = 200, verbose_name = "Ürün Durumu")
     
     created_date = models.DateTimeField(auto_now_add = True, verbose_name = "Oluşturulma Tarihi")
     
@@ -110,11 +110,10 @@ class Product(models.Model):
         return self.name
     
     def save(self, *args, **kwargs):
-        if self.unique_id is None and self.created_date and self.id:
-            self.unique_id = self.created_date.strftime('75%Y%m%dd23') + str(self.id)
+        self.slug = slugify(self.name)
         
-        if self.slug is None:
-            self.slug = slugify(self.name)
+        if self.unique_id is None and self.created_date and self.id:
+            self.unique_id = self.created_date.strftime('75%Y%m%d23') + str(self.pk)
             
         return super().save(*args, **kwargs)
             

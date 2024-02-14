@@ -4,9 +4,10 @@ from storeApp.models import Categories, Brand, Color, Filter_Price, Product, Ima
 
 @admin.register(Categories)
 class CategoriesAdmin(admin.ModelAdmin):
-    list_display = ['slug', 'name',]
+    list_display = ['id', 'slug', 'name',]
     list_editable = ['name',]
-    search_fields = ['name',]
+    search_fields = ['name','slug']
+    readonly_fields = ['slug']
     
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):
@@ -32,6 +33,10 @@ class TagInline(admin.TabularInline):
     model = Tag
     
 class ProductAdmin(admin.ModelAdmin):
+    list_display = ['unique_id','name', 'price', 'status', 'stock', 'brand', 'slug', 'created_date', 'updated_date']
+    list_editable = ['price', 'stock', 'brand']
+    readonly_fields = ['unique_id', 'created_date', 'updated_date', 'slug']
+    search_fields = ['unique_id', 'name']
     inlines = [ImagesInline, TagInline]
     
 

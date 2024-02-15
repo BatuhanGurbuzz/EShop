@@ -55,3 +55,20 @@ def index(request):
 
 def products(request):
     return render(request,"pages/products.html",get_settings(request))
+
+def search(request):
+    query = request.GET.get('query')
+    products = Product.objects.filter(name__icontains=query)
+    context = {
+        "products": products,
+    }
+    return render(request,"partials/search.html",context)
+
+def products_detail(request, id, slug):
+    product = Product.objects.get(id=id, slug=slug)
+    
+    context = {
+        "product": product,
+    }
+    
+    return render(request,"pages/product_detail.html",context)

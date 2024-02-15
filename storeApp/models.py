@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from ckeditor.fields import RichTextField
 class Categories(models.Model):
     name = models.CharField(max_length = 200, verbose_name = "Kategori Adı")
     
@@ -82,9 +83,9 @@ class Product(models.Model):
     
     price = models.IntegerField(verbose_name = "Fiyat")
     
-    information = models.TextField(verbose_name = "Bilgi", blank = True, null = True)
+    information = RichTextField(verbose_name = "Ürün Bilgisi", null=True, blank=True)
     
-    description = models.TextField(verbose_name = "Açıklama", blank = True, null = True)
+    description = RichTextField(verbose_name = "Ürün Açıklaması", null=True, blank=True)
     
     stock = models.CharField(choices = STOCK, max_length = 60, verbose_name = "Stok Durumu")
     
@@ -146,3 +147,23 @@ class Tag(models.Model):
     class Meta:
         verbose_name = "Etiket"
         verbose_name_plural = "Etiketler"
+        
+class Contact(models.Model):
+    name = models.CharField(max_length = 200, verbose_name = "İsim")
+    
+    email = models.EmailField(max_length = 200, verbose_name = "E-Posta")
+    
+    subject = models.CharField(max_length = 200, verbose_name = "Konu")
+    
+    message = models.TextField(verbose_name = "Mesaj")
+    
+    date = models.DateTimeField(auto_now_add = True, verbose_name = "Tarih")
+    
+    def __str__(self):
+        return self.email
+    
+    class Meta:
+        verbose_name = "İletişim"
+        verbose_name_plural = "İletişimler"
+        
+        

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from storeApp.models import Categories, Brand, Color, Filter_Price, Product, Images, Tag
+from storeApp.models import Categories, Brand, Color, Filter_Price, Product, Images, Tag, Contact
 
 
 @admin.register(Categories)
@@ -24,6 +24,12 @@ class ColorAdmin(admin.ModelAdmin):
 class Filter_PriceAdmin(admin.ModelAdmin):
     list_display = ['description','price',]
     list_editable = ['price',]
+    
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email', 'subject', 'message', 'date']
+    search_fields = ['email', 'subject']
+    readonly_fields = ['name', 'email', 'subject', 'message', 'date']
 
 
 class ImagesInline(admin.TabularInline):

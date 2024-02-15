@@ -121,7 +121,7 @@
                                     <span class="new">{{product.condition}}</span>
                                 </span>
                                 <div class="thumb">
-                                    <a href="single-product.html" class="image">
+                                    <a href="/urunler/{{ product.id }}" class="image">
                                         <img src="{{product.image.url}}" alt="{{product.name}}" style="height:275px;" />
                                         <img class="hover-image" src="{{product.image.url}}" alt="Product" />
                                     </a>
@@ -131,7 +131,7 @@
                                         <a href="#">{{product.categories}}</a>
                                     </span>
                                     <h5 class="title">
-                                        <a href="single-product.html">
+                                        <a href="{% url 'product_detail' id=product.id slug=product.slug %}">
                                             {{product.name | truncatewords:5}}
                                         </a>
                                     </h5>

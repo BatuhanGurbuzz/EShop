@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from ckeditor.fields import RichTextField
+from django.contrib.auth.models import User
 class Categories(models.Model):
     name = models.CharField(max_length = 200, verbose_name = "Kategori Adı")
     
@@ -166,4 +167,77 @@ class Contact(models.Model):
         verbose_name = "İletişim"
         verbose_name_plural = "İletişimler"
         
+class Order(models.Model):
+    PAID = (
+        ('Paid', 'Ödendi'),
+        ('Not Paid', 'Ödenmedi'),
+    )
+    
+    user = models.ForeignKey(User, on_delete = models.CASCADE, verbose_name = "Kullanıcı")
+    
+    firstname = models.CharField(max_length = 200, verbose_name = "Ad")
+    
+    lastname = models.CharField(max_length = 200, verbose_name = "Soyad")
+    
+    country = models.CharField(max_length = 200, verbose_name = "Ülke")
+    
+    address = models.TextField(verbose_name = "Adres")
+    
+    city = models.CharField(max_length = 200, verbose_name = "Şehir")
+    
+    state = models.CharField(max_length = 200, verbose_name = "İlçe")
+    
+    postcode = models.IntegerField(verbose_name = "Posta Kodu")
+    
+    phone = models.IntegerField(verbose_name = "Telefon")
+    
+    email = models.EmailField(max_length = 200, verbose_name = "E-Posta")
+    
+    additional_information = models.TextField(verbose_name = "Ek Bilgi", blank = True, null = True)
+    
+    amount = models.IntegerField(verbose_name = "Tutar")
+    
+    payment_id = models.CharField(max_length = 200, null = True, blank = True, verbose_name = "Ödeme ID")
+    
+    paid = models.CharField(choices = PAID, default = "Ödenmedi", max_length = 200, verbose_name = "Ödeme Durumu")
+    
+    date = models.DateTimeField(auto_now_add = True, verbose_name = "Tarih")
+    
+    def __str__(self):
+        return self.user.username
+    
+    class Meta:
+        verbose_name = "Sipariş"
+        verbose_name_plural = "Siparişler"
         
+class CartOrder(models.Model):
+    STATUS = (
+        ('New', 'Sipariş Alındı'),
+        ('Accepted', 'Hazırlanıyor'),
+        ('Cancelled', 'İptal Edildi'),
+        ('Completed', 'Tamamlandı'),
+        ('Returned', 'İade Edildi'),
+        ('Shipped', 'Kargoya Verildi'),
+    )
+    
+    order = models.ForeignKey(Order, on_delete = models.CASCADE, verbose_name = "Sipariş")
+    
+    product = models.ForeignKey(Product, on_delete = models.CASCADE, verbose_name = "Ürün")
+    
+    image = models.ImageField(upload_to = 'products/', verbose_name = "Ürün Resmi")
+    
+    quantity = models.CharField(max_length = 200, verbose_name = "Miktar")
+    
+    price = models.CharField(max_length = 200, verbose_name = "Fiyat")
+    
+    total = models.CharField(max_length = 200, verbose_name = "Toplam")
+    
+    status = models.CharField(choices = STATUS, default = "New", max_length = 200, verbose_name = "Durum")
+    
+    def __str__(self):
+        return self.order.user.username
+    
+    class Meta:
+        verbose_name = "Sipariş Ürün"
+        verbose_name_plural = "Sipariş Ürünler"
+    

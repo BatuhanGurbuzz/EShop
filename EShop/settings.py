@@ -27,8 +27,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'ckeditor',
+    'cart',
     'storeApp.apps.StoreappConfig',
 ]
+
+CART_SESSION_ID = 'cart'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -53,6 +56,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'cart.context_processor.cart_total_amount',
             ],
         },
     },
@@ -118,7 +122,19 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Host for sending e-mail.
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'dd7490623@gmail.com'
+EMAIL_HOST_PASSWORD = 'wrqhrcrgxmczqjup'
+
+# Ödeme işlemleri için iyzico ayarları
+IYZIPAY_API_KEY = 'sandbox-pjriaDcg7LZeMhDtrGznoXDiJpKTPjwh'
+IYZIPAY_SECRET_KEY = 'sandbox-W60SybR9duT1ceFVmzaKhGTITtcVv3yd'
+IYZIPAY_BASE_URL = 'sandbox-api.iyzipay.com'
+
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

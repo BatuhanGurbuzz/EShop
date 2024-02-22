@@ -1,5 +1,5 @@
 from django.contrib import admin
-from storeApp.models import Categories, Brand, Color, Filter_Price, Product, Images, Tag, Contact
+from storeApp.models import Categories, Brand, Color, Filter_Price, Product, Images, Tag, Contact, Order, CartOrder
 
 
 @admin.register(Categories)
@@ -47,7 +47,18 @@ class ProductAdmin(admin.ModelAdmin):
     
 
 admin.site.register(Product, ProductAdmin)
+
+class OrderInline(admin.TabularInline):
+    model = CartOrder
+    readonly_fields = ['order', 'product', 'quantity', 'price', 'total']
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['id', 'firstname', 'lastname', 'email', 'phone', 'additional_information', 'address', 'paid','date']
     
-
-
+    inlines = [OrderInline]
+    
+    list_editable = ['paid']
+    
+    readonly_fields = ['firstname', 'lastname', 'email', 'phone', 'additional_information', 'address', 'date']
     

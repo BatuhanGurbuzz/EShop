@@ -38,9 +38,12 @@
                         <div class="col d-none d-lg-block">
                             <div class="top-nav">
                                 <ul>
-                                    <li><a href="tel:0123456789"><i class="fa fa-phone"></i> +012 3456 789</a></li>
-                                    <li><a href="mailto:demo@example.com"><i class="fa fa-envelope-o"></i> demo@example.com</a></li>
                                     <li><a href="my-account.html"><i class="fa fa-user"></i> Account</a></li>
+                                    {% if user.is_authenticated %}
+                                        <li><a href="{% url 'user_logout' %}"><i class="fa fa-unlock"></i> Çıkış Yap</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'user_login' %}"><i class="fa fa-lock"></i> Giriş yap/Kayıt</a></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -54,7 +57,7 @@
                     <div class="row justify-content-between align-items-center">
                         <div class="col-lg-3 col">
                             <div class="header-logo">
-                                <a href="index.html"><img src="{% static 'assets/images/logo/logo.png' %}" alt="Site Logo" /></a>
+                                <a href="{% url 'index' %}"><img src="{% static 'assets/images/logo/logo.png' %}" alt="Site Logo" /></a>
                             </div>
                         </div>
                         <div class="col-lg-6 d-none d-lg-block">
@@ -74,7 +77,7 @@
                                 <!-- Single Wedge End -->
                                 <a href="#offcanvas-cart" class="header-action-btn header-action-btn-cart offcanvas-toggle pr-0">
                                     <i class="pe-7s-shopbag"></i>
-                                    <span class="header-action-num">01</span>
+                                    <span class="header-action-num">{{ request.session.cart|length }}</span>
                                     <!-- <span class="cart-amount">€30.00</span> -->
                                 </a>
                                 <a href="#offcanvas-mobile-menu" class="header-action-btn header-action-btn-menu offcanvas-toggle d-lg-none">
@@ -112,7 +115,7 @@
                                 <!-- Single Wedge End -->
                                 <a href="#offcanvas-cart" class="header-action-btn header-action-btn-cart offcanvas-toggle pr-0">
                                     <i class="pe-7s-shopbag"></i>
-                                    <span class="header-action-num">01</span>
+                                    <span class="header-action-num">{{ request.session.cart|length }}</span>
                                     <!-- <span class="cart-amount">€30.00</span> -->
                                 </a>
                                 <a href="#offcanvas-mobile-menu" class="header-action-btn header-action-btn-menu offcanvas-toggle d-lg-none">
@@ -130,13 +133,12 @@
                     <div class="header-nav">
                         <div class="main-menu position-relative">
                             <ul>
-                                <li class="dropdown"><a href="#">Home <i class="fa fa-angle-down"></i></a>
-                                    <ul class="sub-menu">
-                                        <li><a href="index.html">Home 1</a></li>
-                                        <li><a href="index-2.html">Home 2</a></li>
-                                    </ul>
+                                <li class="dropdown">
+                                    <a href="{% url 'index' %}">
+                                        Home <i class="fa fa-angle-down"></i>
+                                    </a>
                                 </li>
-                                <li><a href="about.html">About</a></li>
+                                <li><a href="#">About</a></li>
                                 <li class="dropdown position-static"><a href="about.html">Pages <i class="fa fa-angle-down"></i></a>
                                     <ul class="mega-menu d-block">
                                         <li class="d-flex">
@@ -246,7 +248,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a href="contact.html">Contact</a></li>
+                                <li><a href="{% url 'contact' %}">Contact</a></li>
                             </ul>
                         </div>
                     </div>
@@ -312,6 +314,8 @@
             </div>
         </div>
         <!-- OffCanvas Wishlist End -->
+       
+        {% load cart_tag %}
         <!-- OffCanvas Cart Start -->
         <div id="offcanvas-cart" class="offcanvas offcanvas-cart">
             <div class="inner">
@@ -321,41 +325,53 @@
                 </div>
                 <div class="body customScroll">
                     <ul class="minicart-product-list">
-                        <li>
-                            <a href="single-product.html" class="image"><img src="assets/images/product-image/1.webp" alt="Cart product Image"></a>
-                            <div class="content">
-                                <a href="single-product.html" class="title">Modern Smart Phone</a>
-                                <span class="quantity-price">1 x <span class="amount">$18.86</span></span>
-                                <a href="#" class="remove">×</a>
+                        {% if request.session.cart|length < 1 %}
+                            <!-- Empty Cart area start -->
+                            <div class="empty-cart-area pb-100px pt-100px">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="cart-heading">
+                                                <h2>Alışveriş Sepetim</h2>
+                                            </div>
+                                            <div class="empty-text-contant text-center">
+                                                <i class="pe-7s-shopbag"></i>
+                                                <h3>Sepetiniz boş</h3>
+                                                <a class="empty-cart-btn" href="{% url 'index' %}">
+                                                    <i class="fa fa-arrow-left"> </i> Alışverişe Devam Et
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </li>
-                        <li>
-                            <a href="single-product.html" class="image"><img src="assets/images/product-image/2.webp" alt="Cart product Image"></a>
-                            <div class="content">
-                                <a href="single-product.html" class="title">Bluetooth Headphone</a>
-                                <span class="quantity-price">1 x <span class="amount">$43.28</span></span>
-                                <a href="#" class="remove">×</a>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="single-product.html" class="image"><img src="assets/images/product-image/3.webp" alt="Cart product Image"></a>
-                            <div class="content">
-                                <a href="single-product.html" class="title">Smart Music Box</a>
-                                <span class="quantity-price">1 x <span class="amount">$37.34</span></span>
-                                <a href="#" class="remove">×</a>
-                            </div>
-                        </li>
+                            <!-- Empty Cart area end -->
+                        {% else %}
+
+                            {% for key,value in request.session.cart.items %}
+                                <li>
+                                    <a href="{% url 'cart_detail' %}" class="image"><img src="{{value.image}}" alt="Cart product Image"></a>
+                                    <div class="content">
+                                        <a href="{% url 'cart_detail' %}" class="title">{{value.name|truncatewords:5}}</a>
+                                        <span class="quantity-price">{{value.quantity}} x <span class="amount">{{ value.price }} TL</span></span>
+                                        <a href="{% url 'item_clear' key %}" class="remove">×</a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
                     </ul>
                 </div>
                 <div class="foot">
                     <div class="buttons mt-30px">
-                        <a href="cart.html" class="btn btn-dark btn-hover-primary mb-30px">view cart</a>
-                        <a href="checkout.html" class="btn btn-outline-dark current-btn">checkout</a>
+                        <a href="{% url 'cart_detail' %}" class="btn btn-dark btn-hover-primary mb-30px">Sepeti Görüntüle</a>
+                        <a href="{% url 'cart_checkout' %}" class="btn btn-outline-dark current-btn">Sipariş Ver</a>
                     </div>
                 </div>
+                
             </div>
         </div>
         <!-- OffCanvas Cart End -->
+        
         <!-- OffCanvas Menu Start -->
         <div id="offcanvas-mobile-menu" class="offcanvas offcanvas-mobile-menu">
             <button class="offcanvas-close"></button>
@@ -469,7 +485,7 @@
                                 <li><a href="blog-single-right-sidebar.html">Single Right Sidbar</a>
                             </ul>
                         </li>
-                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="{% url 'contact' %}">Contact Us</a></li>
                     </ul>
                 </div>
                 <!-- OffCanvas Menu End -->
@@ -585,24 +601,28 @@
         <!-- Modal end -->
 
         <!-- Modal Cart -->
-        <div class="modal customize-class fade" id="exampleModal-Cart" tabindex="-1"   aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body text-center">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="pe-7s-close"></i></button>
-                        <div class="tt-modal-messages">
-                            <i class="pe-7s-check"></i> Added to cart successfully!
-                        </div>
-                        <div class="tt-modal-product">
-                            <div class="tt-img">
-                                <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+        {% for i in products %}
+            <div class="modal customize-class fade" id="exampleModal-Cart-{{forloop.counter}}" tabindex="-1"   aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body text-center">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="pe-7s-close"></i></button>
+                            <div class="tt-modal-messages">
+                                <i class="pe-7s-check"></i> Ürün sepete başarıyla eklendi
                             </div>
-                            <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                            <div class="tt-modal-product">
+                                <div class="tt-img">
+                                    <img src="{{i.image.url}}" alt="Modern Smart Phone">
+                                </div>
+                                <h2 class="tt-title"><a href="#">{{ i.name|truncatewords:5 }}</a></h2>
+                                <br>
+                                <a href="{% url 'cart_add' i.id %}"> Sepeti Ekle </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>     
+            </div>     
+        {% endfor %}
         <!-- Modal wishlist -->
         <div class="modal customize-class fade" id="exampleModal-Wishlist" tabindex="-1"   aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -686,7 +706,7 @@
                                         <div class="footer-row">
                                             <ul class="align-items-center">
                                                 <li class="li"><a class="single-link" href="my-account.html">My Account</a></li>
-                                                <li class="li"><a class="single-link" href="contact.html">Contact</a></li>
+                                                <li class="li"><a class="single-link" href="{% url 'contact' %}">Contact</a></li>
                                                 <li class="li"><a class="single-link" href="cart.html">Shopping cart</a></li>
                                                 <li class="li"><a class="single-link" href="shop-left-sidebar.html">Shop</a></li>
                                                 <li class="li"><a class="single-link" href="login.html">Services Login</a></li>
@@ -704,7 +724,7 @@
                                         <div class="footer-row">
                                             <ul class="align-items-center">
                                                 <li class="li"><a class="single-link" href="my-account.html">My Account</a></li>
-                                                <li class="li"><a class="single-link" href="contact.html">Contact</a></li>
+                                                <li class="li"><a class="single-link" href="{% url 'contact' %}">Contact</a></li>
                                                 <li class="li"><a class="single-link" href="cart.html">Shopping cart</a></li>
                                                 <li class="li"><a class="single-link" href="shop-left-sidebar.html">Shop</a></li>
                                                 <li class="li"><a class="single-link" href="login.html">Services Login</a></li>
